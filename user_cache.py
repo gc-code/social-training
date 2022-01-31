@@ -14,7 +14,7 @@ class UserCache:
                     if parts[0] == screen_name:
                         return parts[1].strip()
         except FileNotFoundError:
-            open(self.file_name, 'w').close()
+            pass
         return None
 
     def write_user(self, screen_name, user_id):
