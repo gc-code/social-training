@@ -1,0 +1,6 @@
+*.log
+user-cache.txt
+config.ini
+tweet-data.csv
+__pycache__
+.idea

@@ -1,0 +1,4 @@
+[TWITTER]
+API_URL = https://api.twitter.com/
+APP_NAME = my-app
+BEARER_TOKEN = my-token
