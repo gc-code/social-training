@@ -1,6 +1,7 @@
 import logging.config
 import configparser
 import argparse
+import datetime
 from twitter import Twitter
 from user_cache import UserCache
 from tweet_writer import write_timeline
@@ -16,13 +17,18 @@ def parse_command_line():
     parser = argparse.ArgumentParser(description='Twitter information gathering tool')
     parser.add_argument('username', type=str,
                         help='Get information for a particular user')
-    parser.add_argument('--start-time', type=str,
-                        help='Start time to retrieve tweets')
-    parser.add_argument('--end-time', type=str,
-                        help='End time to retrieve tweets')
+    parser.add_argument('--start-date', type=str,
+                        help='Start date to retrieve tweets DD/MM/YYYY')
+    parser.add_argument('--end-date', type=str,
+                        help='End date to retrieve tweets DD/MM/YYYY')
     parser.add_argument('--num-pages', type=str,
                         help='Number of tweet pages to retrieve')
     return parser.parse_args()
+
+
+def get_iso_time(date):
+    date_time = datetime.datetime.strptime(date, '%d/%m/%Y')
+    return date_time.isoformat(timespec='milliseconds') + 'Z'
 
 
 def main():
@@ -49,8 +55,9 @@ def main():
         logging.info(f'Found ID {user_id} for user {screen_name} from cache')
 
     time_range = None
-    if args.start_time is not None and args.end_time is not None:
-        time_range = (args.start_time, args.end_time)
+    if args.start_date is not None and args.end_date is not None:
+        time_range = (get_iso_time(args.start_date), get_iso_time(args.end_date))
+        print(time_range)
         timeline = twitter.get_timeline(user_id, time_range=time_range)
     else:
         timeline = twitter.get_timeline(user_id)
